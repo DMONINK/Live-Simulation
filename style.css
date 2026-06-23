@@ -1,0 +1,336 @@
+/* ============================================================
+   style.css — AI Civilization Simulation Styles
+   ============================================================ */
+
+/* ─── Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0d1b2a;
+  color: #e8e8e8;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  user-select: none;
+}
+
+/* ─── Canvas ────────────────────────────────────────────────── */
+#canvas-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+#canvas-container canvas {
+  display: block;
+  cursor: default;
+}
+
+/* ─── Loading Screen ────────────────────────────────────────── */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: linear-gradient(135deg, #0d1b2a 0%, #1a2f4a 50%, #0d1b2a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#loading-content {
+  text-align: center;
+  max-width: 480px;
+  padding: 20px;
+}
+
+#loading-title {
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #ffd700, #ff8c00, #ff4500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  text-shadow: none;
+}
+
+#loading-sub {
+  font-size: 14px;
+  opacity: 0.6;
+  margin-bottom: 28px;
+  letter-spacing: 1px;
+}
+
+#loading-bar-wrap {
+  width: 300px;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  margin: 0 auto 28px;
+  overflow: hidden;
+}
+
+#loading-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ffd700, #ff8c00);
+  border-radius: 3px;
+  transition: width 0.08s linear;
+}
+
+.tip {
+  font-size: 12px;
+  opacity: 0;
+  color: #aac4dd;
+  margin-top: 8px;
+  transition: opacity 0.3s ease;
+  min-height: 20px;
+}
+.tip:first-child { opacity: 1; }
+
+/* ─── UI Overlay ────────────────────────────────────────────── */
+#civ-ui {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.ui-panel {
+  background: rgba(10, 20, 35, 0.82);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  border-radius: 6px;
+  padding: 8px 12px;
+  backdrop-filter: blur(4px);
+  pointer-events: all;
+}
+
+.hidden { display: none !important; }
+
+/* ─── Top Bar ───────────────────────────────────────────────── */
+#ui-topbar {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  pointer-events: none;
+}
+
+#ui-topbar .ui-panel {
+  pointer-events: all;
+  font-size: 12px;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+
+#ui-time    { color: #ffd700; }
+#ui-weather { color: #a8e6cf; }
+#ui-stats   { color: #c8d6e5; }
+#ui-wars    { color: #a8ff78; }
+#ui-ai      { color: #74b9ff; }
+#ui-fps     { color: #636e72; }
+
+/* ─── Event Log ─────────────────────────────────────────────── */
+#ui-log-panel {
+  position: absolute;
+  bottom: 40px;
+  left: 10px;
+  width: 320px;
+  max-height: 280px;
+  overflow: hidden;
+}
+
+#ui-log-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffd700;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+#ui-log-entries {
+  overflow-y: auto;
+  max-height: 240px;
+}
+
+.log-entry {
+  font-size: 11px;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+/* ─── Inspector ─────────────────────────────────────────────── */
+#ui-inspector {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  width: 240px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+#ui-inspector-close {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #636e72;
+  transition: color 0.2s;
+}
+#ui-inspector-close:hover { color: #ff6b6b; }
+
+.insp-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffd700;
+  margin-bottom: 2px;
+}
+.insp-sub {
+  font-size: 11px;
+  color: #74b9ff;
+  margin-bottom: 8px;
+}
+.insp-row {
+  font-size: 11px;
+  margin-bottom: 4px;
+  color: #c8d6e5;
+}
+.insp-section {
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffd700;
+  letter-spacing: 0.5px;
+  margin: 10px 0 4px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255,215,0,0.2);
+  padding-bottom: 3px;
+}
+.insp-small {
+  font-size: 10px;
+  color: #a0a0a0;
+  line-height: 1.7;
+}
+
+/* Personality bars */
+.pbar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+.pbar-label {
+  font-size: 10px;
+  width: 68px;
+  color: #c8d6e5;
+  flex-shrink: 0;
+}
+.pbar-bg {
+  flex: 1;
+  height: 5px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.pbar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+.pbar-val {
+  font-size: 10px;
+  width: 24px;
+  text-align: right;
+  color: #636e72;
+}
+
+/* ─── Villages Panel ────────────────────────────────────────── */
+#ui-villages {
+  position: absolute;
+  top: 60px;
+  left: 10px;
+  width: 220px;
+}
+
+#ui-villages-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffd700;
+  margin-bottom: 6px;
+}
+
+.village-entry {
+  font-size: 11px;
+  padding: 6px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 4px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,215,0,0.08);
+  transition: background 0.15s;
+}
+.village-entry:hover { background: rgba(255,215,0,0.08); }
+.village-entry strong { color: #ffd700; font-size: 12px; }
+.vstat { margin-left: 8px; color: #74b9ff; }
+.vrel  { font-size: 9px; color: #636e72; margin-top: 2px; }
+
+/* ─── Controls Panel ─────────────────────────────────────────── */
+#ui-controls {
+  position: absolute;
+  bottom: 40px;
+  right: 10px;
+  width: 140px;
+}
+
+#ui-speed-ctrl button {
+  background: rgba(255,215,0,0.12);
+  border: 1px solid rgba(255,215,0,0.25);
+  border-radius: 4px;
+  color: #ffd700;
+  font-size: 11px;
+  padding: 3px 7px;
+  cursor: pointer;
+  margin: 2px 2px 0 0;
+  transition: background 0.15s;
+}
+#ui-speed-ctrl button:hover { background: rgba(255,215,0,0.25); }
+
+/* ─── Economy Ticker ─────────────────────────────────────────── */
+#ui-economy {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: #a8e6cf;
+  white-space: nowrap;
+  padding: 5px 14px;
+}
+
+/* ─── Inspector Buttons ────────────────────────────────────────*/
+#ui-inspector-content button {
+  background: rgba(116, 185, 255, 0.15);
+  border: 1px solid rgba(116,185,255,0.3);
+  border-radius: 4px;
+  color: #74b9ff;
+  font-size: 11px;
+  padding: 4px 9px;
+  cursor: pointer;
+  margin: 4px 4px 0 0;
+  transition: background 0.15s;
+}
+#ui-inspector-content button:hover { background: rgba(116,185,255,0.28); }
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,215,0,0.2); border-radius: 2px; }

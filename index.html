@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Civilization Simulation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div id="loading-content">
+      <div id="loading-title">⚔️ AI Civilization</div>
+      <div id="loading-sub">Generating world…</div>
+      <div id="loading-bar-wrap">
+        <div id="loading-bar"></div>
+      </div>
+      <div id="loading-tips">
+        <div class="tip">💡 NPCs have personalities, memories, and relationships</div>
+        <div class="tip">💡 Right-click drag to pan · Scroll to zoom · Click to inspect</div>
+        <div class="tip">💡 AI API is called only for dramatic, life-changing moments</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas container -->
+  <div id="canvas-container"></div>
+
+  <!-- PixiJS CDN — loaded BEFORE modules so PIXI is a global -->
+  <script src="https://cdn.jsdelivr.net/npm/pixi.js@7.3.2/dist/pixi.min.js"></script>
+
+  <!-- Animate loading bar while modules load -->
+  <script>
+    let loadPct = 0;
+    const bar   = document.getElementById('loading-bar');
+    const tips  = document.querySelectorAll('.tip');
+    let   tipIdx = 0;
+
+    const loadAnim = setInterval(() => {
+      loadPct = Math.min(loadPct + Math.random() * 3, 90);
+      if (bar) bar.style.width = loadPct + '%';
+    }, 80);
+
+    // Cycle tips
+    setInterval(() => {
+      tips.forEach(t => t.style.opacity = '0');
+      tipIdx = (tipIdx + 1) % tips.length;
+      setTimeout(() => { if (tips[tipIdx]) tips[tipIdx].style.opacity = '1'; }, 300);
+    }, 3000);
+
+    window.__finishLoad = () => {
+      clearInterval(loadAnim);
+      if (bar) bar.style.width = '100%';
+    };
+  </script>
+
+  <!-- Main simulation (ES6 module — requires local server) -->
+  <script type="module">
+    import './main.js';
+    window.__finishLoad?.();
+  </script>
+
+</body>
+</html>
